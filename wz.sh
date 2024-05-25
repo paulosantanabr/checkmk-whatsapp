@@ -1,5 +1,5 @@
 #!/bin/bash
-# WhatsApp Evolution - v9
+# WhatsApp - Evolution API
 
 #WZID=559384388607
 WZURL="$NOTIFY_PARAMETER_1"
@@ -111,6 +111,40 @@ then
 NOTIFY_SERVICESTATE="*🟣 - Desconhecido*"
 fi
 }
+
+
+translatemessage-en() {
+if [[ "$NOTIFY_HOSTSTATE" = DOWN ]]
+then
+NOTIFY_HOSTSTATE="*🟥 - Unavailable*"
+fi
+
+if [[ "$NOTIFY_HOSTSTATE" = UP ]]
+then
+NOTIFY_HOSTSTATE="*🟩 - Available*"
+fi
+
+if [[ "$NOTIFY_SERVICESTATE" = OK ]]
+then
+NOTIFY_SERVICESTATE="*🟢 - Healthy*"
+fi
+
+if [[ "$NOTIFY_SERVICESTATE" = WARNING ]]
+then
+NOTIFY_SERVICESTATE="*🟡 - Warning*"
+fi
+
+if [[ "$NOTIFY_SERVICESTATE" = CRITICAL ]]
+then
+NOTIFY_SERVICESTATE="*🔴 - Critical*"
+fi
+
+if [[ "$NOTIFY_SERVICESTATE" = UNKNOWN ]]
+then
+NOTIFY_SERVICESTATE="*🟣 - Unknown*"
+fi
+}
+
 
 
 #LOGIC
