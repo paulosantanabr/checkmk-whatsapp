@@ -1,11 +1,15 @@
 #!/bin/bash
-# WhatsApp Evolution - v8
+# WhatsApp Evolution - v9
 
-WZAPIKEY=
-WZID=
-WZURL=
+#WZID=559384388607
+WZURL="$NOTIFY_PARAMETER_1"
+WZAPIKEY="$NOTIFY_PARAMETER_2"
+WZID="$NOTIFY_PARAMETER_3"
 
 testmode() {
+WZURL=""
+WZAPIKEY=
+WZID=
 NOTIFY_HOSTNAME=S-DBORA12
 NOTIFY_HOSTALIAS="Banco de Dados Oracle 19C - Abacate ERP"
 NOTIFY_HOSTADDRESS=192.168.0.1
@@ -174,4 +178,3 @@ fi
 translatemessage
 preparemessage
 sendmessage
-
