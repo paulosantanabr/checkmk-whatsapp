@@ -1,6 +1,7 @@
 #!/bin/bash
-# WhatsApp Evolution - v6
+# WhatsApp Evolution - v7
 
+testmode() {
 NOTIFY_HOSTNAME=S-DBORA12
 NOTIFY_HOSTALIAS="Banco de Dados Oracle 19C - Abacate ERP"
 NOTIFY_HOSTADDRESS=192.168.0.1
@@ -11,6 +12,19 @@ TESTMESSAGE="Plain text message, sent with the Evolution-API 🚀.\n\nHere you c
 OMD_SITE="monitoring"
 CHECKMK_URL="https://teste.com"
 NOTIFY_HOSTURL="/check_mk/index.py?start_url=view.py?view_name%3Dhoststatus%26host%3D$NOTIFY_HOSTNAME%26site%3D$OMD_SITE"
+echo
+echo Parameter: "$1"
+echo Host State: $NOTIFY_HOSTSTATE
+echo Type of Message: $NOTIFY_WHAT
+echo Host name: $NOTIFY_HOSTNAME
+echo Alias: $NOTIFY_HOSTALIAS
+echo Host Address: $NOTIFY_HOSTADDRESS
+echo
+echo Service State: $NOTIFY_SERVICESTATE
+echo Service Display Name: $NOTIFY_SERVICEDISPLAYNAME
+echo
+echo Message: $MESSAGE
+}
 
 #WHATSAPPNUMBERORGROUPID
 WZID=
@@ -18,6 +32,11 @@ WZID=
 
 MODE=notset
 CHECKMK_URL=$(echo $CHECKMKURL$NOTIFY_SERVICEURL$NOTIFY_HOSTURL)
+
+if [[ -z "$OMD_SITE" ]]
+then
+MODE=set
+fi
 
 #Functions
 notset() {
@@ -57,6 +76,7 @@ curl --request POST \
   }
 }
 '
+exit
 }
 
 #Translate
@@ -90,11 +110,7 @@ then
 NOTIFY_SERVICESTATE="*🔴 - Critico*"
 WZ_SERVICESTATE="⌚ ===========================>"
 fi
-
-
-
 }
-
 
 #LOGIC
 
@@ -103,6 +119,7 @@ then
 MODE=$1
 NOTIFY_HOSTSTATE=DOWN
 NOTIFY_WHAT=HOST
+testmode
 translatemessage
 preparemessage
 sendmessage
@@ -113,6 +130,7 @@ then
 MODE=$1
 NOTIFY_HOSTSTATE=UP
 NOTIFY_WHAT=HOST
+testmode
 translatemessage
 preparemessage
 sendmessage
@@ -123,6 +141,7 @@ then
 MODE=$1
 NOTIFY_SERVICESTATE=CRIT
 NOTIFY_WHAT=SERVICE
+testmode
 translatemessage
 preparemessage
 sendmessage
@@ -133,6 +152,7 @@ then
 MODE=$1
 NOTIFY_SERVICESTATE=WARN
 NOTIFY_WHAT=SERVICE
+testmode
 translatemessage
 preparemessage
 sendmessage
@@ -143,30 +163,17 @@ then
 MODE=$1
 NOTIFY_SERVICESTATE=OK
 NOTIFY_WHAT=SERVICE
+testmode
 translatemessage
 preparemessage
 sendmessage
 fi
-
-translatemessage
-preparemessage
-sendmessage
 
 if [[ "$MODE" = notset ]]
 then
 notset
 fi
 
-#DEBUG
-echo
-echo Parameter: "$1"
-echo Host State: $NOTIFY_HOSTSTATE
-echo Type of Message: $NOTIFY_WHAT
-echo Host name: $NOTIFY_HOSTNAME
-echo Alias: $NOTIFY_HOSTALIAS
-echo Host Address: $NOTIFY_HOSTADDRESS
-echo
-echo Service State: $NOTIFY_SERVICESTATE
-echo Service Display Name: $NOTIFY_SERVICEDISPLAYNAME
-echo
-echo Message: $MESSAGE
+translatemessage
+preparemessage
+sendmessage
